@@ -14,7 +14,7 @@ using VRC.Udon;
  *  returns an array of players not sorted by player id
  *  player ids are assigned based on the order they joined
  *  if a player rejoins a world they will get a new player id instead of their old one
- *  so a lobby of twelve people coule have player ids in the thousands...
+ *  so a lobby of twelve people could have player ids in the thousands...
  *  Which is why foreach loops are better than for loops.
  *  For loops only work on playerList, and their index is not in anyway related to their index in playerList
  *  You must check a playerList player's Id to see if it's equal to the playerId you're looking for.
@@ -23,7 +23,7 @@ using VRC.Udon;
 public class PlayerList : UdonSharpBehaviour
 {
     public VRCPlayerApi[] playerList = { null, null, null, null, null, null, null, null, null, null, null, null };
-    public VRCPlayerApi[] temp = { null, null, null, null, null, null, null, null, null, null, null, null };
+    public VRCPlayerApi[] temp = { null, null, null, null, null, null, null, null, null, null, null, null }; //for use when sorting playerList
     
 
     //OnPlayerJoined and OnPlayerLeft are called by VRChat or Unity Networking when these things happen.
