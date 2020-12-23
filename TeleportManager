@@ -1,0 +1,248 @@
+using UdonSharp;
+using UnityEngine;
+using VRC.SDKBase;
+using VRC.Udon;
+
+public class TeleportManager : UdonSharpBehaviour
+{
+    public PlayerList PL;
+    public GameObject teleporterOutput;
+
+    public void TeleportRandomPlayerToSpawn()
+    {
+        //since only master can teleport people
+        if (Networking.LocalPlayer.isMaster) //if this is the master client
+        {
+            TeleportPlayerTo(teleporterOutput); //teleport them
+        }
+        else //if it is not the master client
+        {
+            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, "TeleportRandomPlayerToSpawn"); //tell master to teleport them
+            TeleportPlayerTo(teleporterOutput); //teleport them
+        }
+    }
+
+    public void TeleportPlayerTo(GameObject destination)
+    {
+        int targetPlayer = UnityEngine.Random.Range(0, VRCPlayerApi.GetPlayerCount()); //generate a random number from zero to the player count (minus one to align with array)
+        if (PL.playerList[targetPlayer] != null) //if there is a player in that element of playerList
+        {
+            //since players can only teleport themselves, we teleport if it is the host, and tell that player to teleport themselves if it is not the host
+            if (Networking.LocalPlayer.isMaster && PL.playerList[targetPlayer].playerId == Networking.LocalPlayer.playerId) //if client is host, and teleporting host
+            {
+                PL.playerList[targetPlayer].TeleportTo(destination.transform.position, destination.transform.localRotation); //teleport yourself
+            }
+            else //if we aren't the host, and we aren't teleporting the host
+            {
+                switch(targetPlayer) //tell everyone to teleport the correct player
+                {
+                    case 0:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[0].playerId)
+                        {
+                            Respawn0();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn0");
+                        }
+                        break;
+                    case 1:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[1].playerId)
+                        {
+                            Respawn1();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn1");
+                        }
+                        break;
+                    case 2:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[2].playerId)
+                        {
+                            Respawn2();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn2");
+                        }
+                        break;
+                    case 3:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[3].playerId)
+                        {
+                            Respawn3();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn3");
+                        }
+                        break;
+                    case 4:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[4].playerId)
+                        {
+                            Respawn4();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn4");
+                        }
+                        break;
+                    case 5:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[5].playerId)
+                        {
+                            Respawn5();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn5");
+                        }
+                        break;
+                    case 6:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[6].playerId)
+                        {
+                            Respawn6();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn6");
+                        }
+                        break;
+                    case 7:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[7].playerId)
+                        {
+                            Respawn7();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn7");
+                        }
+                        break;
+                    case 8:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[8].playerId)
+                        {
+                            Respawn8();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn8");
+                        }
+                        break;
+                    case 9:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[9].playerId)
+                        {
+                            Respawn9();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn9");
+                        }
+                        break;
+                    case 10:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[10].playerId)
+                        {
+                            Respawn10();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn10");
+                        }
+                        break;
+                    case 11:
+                        if (Networking.LocalPlayer.playerId == PL.playerList[11].playerId)
+                        {
+                            Respawn11();
+                        }
+                        else
+                        {
+                            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Respawn11");
+                        }
+                        break;
+                }
+            }
+        }
+        PL.playerListDisplay.text += "Teleported playerId" + targetPlayer;
+    }
+    public void Respawn0() //sent to all players
+    {
+        if(PL.playerList[0] != null && PL.playerList[0].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn1() //sent to all players
+    {
+        if (PL.playerList[1] != null && PL.playerList[1].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn2() //sent to all players
+    {
+        if (PL.playerList[2] != null && PL.playerList[2].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn3() //sent to all players
+    {
+        if (PL.playerList[3] != null && PL.playerList[3].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn4() //sent to all players
+    {
+        if (PL.playerList[4] != null && PL.playerList[4].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn5() //sent to all players
+    {
+        if (PL.playerList[5] != null && PL.playerList[5].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn6() //sent to all players
+    {
+        if (PL.playerList[6] != null && PL.playerList[6].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn7() //sent to all players
+    {
+        if (PL.playerList[7] != null && PL.playerList[7].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn8() //sent to all players
+    {
+        if (PL.playerList[8] != null && PL.playerList[8].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn9() //sent to all players
+    {
+        if (PL.playerList[9] != null && PL.playerList[9].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn10() //sent to all players
+    {
+        if (PL.playerList[10] != null && PL.playerList[10].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+    public void Respawn11() //sent to all players
+    {
+        if (PL.playerList[11] != null && PL.playerList[11].playerId == Networking.LocalPlayer.playerId) //if this client's playerId is the same as player in 0 element of playerlist
+        {
+            Networking.LocalPlayer.TeleportTo(teleporterOutput.transform.position, teleporterOutput.transform.localRotation); //teleport that MF
+        }
+    }
+}
